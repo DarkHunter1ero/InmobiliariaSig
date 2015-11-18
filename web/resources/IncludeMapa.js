@@ -17,7 +17,7 @@ function init(){
     var wmsEjes = new OpenLayers.Layer.WMS('Ejes de calles','http://localhost:8080/geoserver/wms/',{layers: 'Ejes'},{});
     var wmsPropiedad = new OpenLayers.Layer.WMS('Propiedades','http://localhost:8080/geoserver/wms/',{layers: 'Propiedad', transparent: true},{isBaseLayer: false});
     var wmsZonaCrecimiento = new OpenLayers.Layer.WMS('Zona Interes','http://localhost:8080/geoserver/wms/',{layers: 'ZonaInteres', transparent: true},{isBaseLayer: false});
-    
+    var wmsNegocios = new OpenLayers.Layer.WMS('Comercios','http://localhost:8080/geoserver/wms/',{layers: 'negocios', transparent: true},{isBaseLayer: true});
     saveStrategy = new OpenLayers.Strategy.Save();
     filterStrategy = new OpenLayers.Strategy.Filter();
     wfsPropiedad = new OpenLayers.Layer.Vector('Propiedades', {
@@ -46,7 +46,7 @@ function init(){
         })
     });
     
-    map.addLayers([google_satellite, wmsZonaCrecimiento, wmsEjes, wmsPropiedad, wfsZonaInteres, wfsPropiedad]);
+    map.addLayers([google_satellite, wmsZonaCrecimiento, wmsEjes, wmsPropiedad, wfsZonaInteres, wfsPropiedad, wmsNegocios]);
     map.addControl(new OpenLayers.Control.LayerSwitcher());
     
     drawControls = {

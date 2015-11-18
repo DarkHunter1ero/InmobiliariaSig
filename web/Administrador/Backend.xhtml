@@ -77,9 +77,16 @@
                             <p:outputLabel value="Coordenadas:" for="text" />
                             <h:inputText disabled="true" id="text" value="no set" />
                         </p:panelGrid>
-                        
+                        <p:panelGrid id="gridZona" columns="3"  style="text-align: center; margin: auto;">
+                            <p:outputLabel value="Demanda:" for="demanda" />
+                            <p:selectOneMenu id="demanda" widgetVar="selectdemanda" >
+                                <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                <f:selectItem itemLabel="Baja" itemValue="Baja" />
+                                <f:selectItem itemLabel="Media" itemValue="Media" />
+                                <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                            </p:selectOneMenu> 
+                        </p:panelGrid>
                         <p:panelGrid columns="3"  style="text-align: center; margin: auto;">
-                            
                             <p:commandButton action="#" value="Guardar" onclick="accion();" >     
                                 <f:ajax event="click" execute="@form"/> 
                             </p:commandButton>
