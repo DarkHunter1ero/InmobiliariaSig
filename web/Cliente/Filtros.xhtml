@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+          
+    <ui:composition>
+        <h:form id="FormFiltros">
+            <p:panelGrid columns="2">
+                <p:outputLabel value="Tipo: " for="tipo1" />
+                <p:selectOneMenu id="tipo1" widgetVar="selectTipo" >
+                    <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                    <f:selectItem itemLabel="Casa" itemValue="Casa" />
+                    <f:selectItem itemLabel="Apartamento" itemValue="Apartamento" />
+                    <f:selectItem itemLabel="Terreno" itemValue="Terreno" />
+                </p:selectOneMenu>
+                <p:outputLabel value="Transaccion:  " for="tipo2" />
+                <p:selectOneMenu id="tipo2" widgetVar="selectVentaAlquiler" >
+                    <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                    <f:selectItem itemLabel="Venta" itemValue="Venta" />
+                    <f:selectItem itemLabel="Alquiler" itemValue="Alquiler" />
+                    <f:selectItem itemLabel="Venta-Alquiler" itemValue="VentaAlquiler" />
+                </p:selectOneMenu>
+                <h:commandButton action="#" onclick="filtroTipo();" value="Filtrar">
+                    <f:ajax event="click" execute="@form"/> 
+                </h:commandButton>
+                <h:commandButton action="#" onclick="resetTipo();" value="reset">
+                    <f:ajax event="click" execute="@form"/> 
+                </h:commandButton>
+            </p:panelGrid>
+        </h:form>
+    </ui:composition>
+</html>

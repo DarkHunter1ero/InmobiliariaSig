@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition template="/Inicio.xhtml">
+        <ui:define name="centro">
+            <h:form id="FormUserLog">
+                <h:panelGroup id="display" layout="span">
+                    <p:panelGrid columns="5" style="text-align: center; margin: auto;">
+                        <h:commandButton action="#" onclick="seleccionarPropiedad();" image="/OpenLayer/img/Icono_seleccionar.jpg" style="width: 30px; height: 30px">
+                            <f:ajax event="click" execute="@form"/> 
+                        </h:commandButton>
+                        <h:commandButton action="#" onclick="dibujarPropiedad();" image="/OpenLayer/img/Icono_casa.png" style="width: 30px; height: 30px">
+                            <f:ajax event="click" execute="@form"/> 
+                        </h:commandButton>
+                        <h:commandButton action="#" onclick="eliminarPropiedad();" image="/OpenLayer/img/Icono_Eliminar.jpg" style="width: 30px; height: 30px">
+                            <f:ajax event="click" execute="@form"/> 
+                        </h:commandButton>
+                        <h:commandButton action="#" onclick="crearZonaInteres();" image="/OpenLayer/img/Icono_Poligono.png" style="width: 30px; height: 30px">
+                            <f:ajax event="click" execute="@form"/> 
+                        </h:commandButton>
+                    </p:panelGrid>
+                    
+                    <p:panelGrid columns="2"  style="text-align: center; margin: auto;">
+                        <div id="map" style="width: 900px; height: 700px;"></div>
+                        
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Estado: " for="estado" />
+                            
+                            <p:selectOneMenu id="estado" widgetVar="selectEstado" >
+                                <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                <f:selectItem itemLabel="Reservada" itemValue="Reservada" />
+                                <f:selectItem itemLabel="Publica" itemValue="Publica" />
+                                <f:selectItem itemLabel="Privada" itemValue="Privada" />
+                                <f:selectItem itemLabel="Cancelada" itemValue="Cancelada" />
+                                <f:selectItem itemLabel="Cerrada" itemValue="Cerrada" />
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Alquiler " for="alquiler" />
+                            <p:selectBooleanCheckbox id="alquiler" widgetVar="selectAlquiler" />
+                            <p:outputLabel value="Venta " for="venta" />
+                            <p:selectBooleanCheckbox id="venta" widgetVar="selectVenta" />
+                            <p:outputLabel value="Barrio: " for="barrio" />
+                            <p:inputText id="barrio" />
+                            <p:outputLabel value="Precio: " for="precio" />
+                            <p:inputText id="precio" />
+                            <p:outputLabel value="Cantidad dormitorio: " for="dormitorio" />
+                            <p:inputText id="dormitorio" />
+                            <p:outputLabel value="Cantidad banio: " for="banio" />
+                            <p:inputText id="banio" />
+                            <p:outputLabel value="m2 construido: " for="m2construido" />
+                            <p:inputText id="m2construido" />
+                            <p:outputLabel value="m2 de terreno: " for="m2terreno" />
+                            <p:inputText id="m2terreno" />
+                            <p:outputLabel value="Parrillero" for="parrilla" />
+                            <p:selectBooleanCheckbox id="parrilla" widgetVar="selectParrilla"  />
+                            <p:outputLabel value="Garage" for="garage" />
+                            <p:selectBooleanCheckbox id="garage" widgetVar="selectGarage" />
+                            <p:outputLabel value="Piscina" for="piscina" />
+                            <p:selectBooleanCheckbox id="piscina" widgetVar="selectPiscina" />
+                            <p:outputLabel value="Calefaccion" for="calefaccion" />
+                            <p:selectBooleanCheckbox id="calefaccion" widgetVar="selectCalefaccion" />
+                            <p:outputLabel value="Tipo propiedad:" for="tipo" />
+                            <p:selectOneMenu id="tipo" widgetVar="selecttipo" >
+                                <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                                <f:selectItem itemLabel="Casa" itemValue="Casa" />
+                                <f:selectItem itemLabel="Apartamento" itemValue="Apartamento" />
+                                <f:selectItem itemLabel="Terreno" itemValue="Terreno" />
+                            </p:selectOneMenu> 
+                            <p:outputLabel value="Coordenadas:" for="text" />
+                            <h:inputText disabled="true" id="text" value="no set" />
+                        </p:panelGrid>
+                        
+                        <p:panelGrid columns="3"  style="text-align: center; margin: auto;">
+                            
+                            <p:commandButton action="#" value="Guardar" onclick="accion();" >     
+                                <f:ajax event="click" execute="@form"/> 
+                            </p:commandButton>
+                            
+                            <p:commandButton value="Cancelar" />
+                            
+                            <p:link value="Gestion Usuarios registrados" id="Gestion_Usuario" href="/Administrador/usuario/List.xhtml"/>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </h:panelGroup>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
