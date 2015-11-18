@@ -11,18 +11,22 @@
             <h:form id="FormUserLog">
                 <h:panelGroup id="display" layout="span">
                     <p:panelGrid columns="5" style="text-align: center; margin: auto;">
-                        <h:commandButton action="#" onclick="seleccionarPropiedad();" image="/OpenLayer/img/Icono_seleccionar.jpg" style="width: 30px; height: 30px">
-                            <f:ajax event="click" execute="@form"/> 
-                        </h:commandButton>
-                        <h:commandButton action="#" onclick="dibujarPropiedad();" image="/OpenLayer/img/Icono_casa.png" style="width: 30px; height: 30px">
-                            <f:ajax event="click" execute="@form"/> 
-                        </h:commandButton>
-                        <h:commandButton action="#" onclick="eliminarPropiedad();" image="/OpenLayer/img/Icono_Eliminar.jpg" style="width: 30px; height: 30px">
-                            <f:ajax event="click" execute="@form"/> 
-                        </h:commandButton>
-                        <h:commandButton action="#" onclick="crearZonaInteres();" image="/OpenLayer/img/Icono_Poligono.png" style="width: 30px; height: 30px">
-                            <f:ajax event="click" execute="@form"/> 
-                        </h:commandButton>
+                        <p:commandLink action="#" onclick="seleccionarPropiedad();" style="width: 30px; height: 30px">
+                            <h:graphicImage name="image/Icono_seleccionar.jpg" style="width: 30px; height: 30px"/>
+                        </p:commandLink>
+                        <p:commandLink action="#{controladorBtn.dibujarCasa()}" onclick="dibujarPropiedad();" style="width: 30px; height: 30px">
+                            <h:graphicImage name="image/Icono_casa.png" style="width: 30px; height: 30px"/>
+                        </p:commandLink>
+                        <p:commandLink action="#" onclick="eliminarPropiedad();" style="width: 40px; height: 30px">
+                            <h:graphicImage name="image/Icono_Eliminar_Prop.png" style="width: 40px; height: 30px"/>
+                        </p:commandLink>
+                        <p:commandLink action="#{controladorBtn.dibujarZona()}" onclick="crearZonaInteres();" style="width: 30px; height: 30px">
+                            <h:graphicImage name="image/Icono_Poligono.png" style="width: 30px; height: 30px"/>
+                            
+                        </p:commandLink>
+                        <p:commandLink action="#" onclick="eliminarZona();" style="width: 40px; height: 30px">
+                            <h:graphicImage name="image/Icono_Eliminar_Zona.png" style="width: 40px; height: 30px"/>
+                        </p:commandLink>
                     </p:panelGrid>
                     
                     <p:panelGrid columns="2"  style="text-align: center; margin: auto;">

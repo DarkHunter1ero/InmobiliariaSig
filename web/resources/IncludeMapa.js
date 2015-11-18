@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 document.write("<script type='text/javascript' src='OpenLayer/OpenLayers.js'></script>");
-var map, drawControls, saveStrategy, wfsPropiedad, selectFeature, wfsZonaInteres;
+var map, drawControls, saveStrategy, wfsPropiedad, selectFeature, wfsZonaInteres, selectFeatureZona;
 
 OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
 function init(){
@@ -16,10 +16,11 @@ function init(){
     map = new OpenLayers.Map('map', {projection: proj_900913 ,displayProjection: proj_4326, numZoomLevels: 20});
     var wmsEjes = new OpenLayers.Layer.WMS('Ejes de calles','http://localhost:8080/geoserver/wms/',{layers: 'Ejes'},{});
     var wmsPropiedad = new OpenLayers.Layer.WMS('Propiedades','http://localhost:8080/geoserver/wms/',{layers: 'Propiedad', transparent: true},{isBaseLayer: false});
+    var wmsZonaCrecimiento = new OpenLayers.Layer.WMS('Zona Interes','http://localhost:8080/geoserver/wms/',{layers: 'ZonaInteres', transparent: true},{isBaseLayer: false});
     
     saveStrategy = new OpenLayers.Strategy.Save();
     filterStrategy = new OpenLayers.Strategy.Filter();
-    wfsPropiedad = new OpenLayers.Layer.Vector('wfsPropiedades', {
+    wfsPropiedad = new OpenLayers.Layer.Vector('Propiedades', {
         strategies: [new OpenLayers.Strategy.BBOX, saveStrategy, filterStrategy],
         protocol: new OpenLayers.Protocol.WFS({
             url: 'http://localhost:8080/geoserver/InmobiliariaTsig/wfs/',
@@ -32,7 +33,7 @@ function init(){
         })
     });
  
-    wfsZonaInteres = new OpenLayers.Layer.Vector('wfsPropiedades', {
+    wfsZonaInteres = new OpenLayers.Layer.Vector('Zona de Interes', {
         strategies: [new OpenLayers.Strategy.BBOX, saveStrategy],
         protocol: new OpenLayers.Protocol.WFS({
             url: 'http://localhost:8080/geoserver/InmobiliariaTsig/wfs/',
@@ -45,7 +46,7 @@ function init(){
         })
     });
     
-    map.addLayers([google_satellite, wmsEjes, wfsPropiedad, wfsZonaInteres, wmsPropiedad]);
+    map.addLayers([google_satellite, wmsZonaCrecimiento, wmsEjes, wmsPropiedad, wfsZonaInteres, wfsPropiedad]);
     map.addControl(new OpenLayers.Control.LayerSwitcher());
     
     drawControls = {
@@ -77,6 +78,16 @@ function init(){
             toggleKey: "ctrlKey", // ctrl key removes from selection
             multipleKey: "shiftKey", // shift key adds to selection
             onSelect: cargarDatosPropiedad
+        }
+                ),
+        deleteZona: new OpenLayers.Control.SelectFeature(
+                wfsZonaInteres,
+        {
+            clickout: false, toggle: false,
+            multiple: false, hover: false,
+            toggleKey: "ctrlKey", // ctrl key removes from selection
+            multipleKey: "shiftKey", // shift key adds to selection
+            onSelect: cargarZona
         }
                 )
     };
@@ -157,6 +168,10 @@ function init(){
         PF('selecttipo').selectValue(feature.attributes['tipo']);
     }
     
+    function cargarZona(feature){
+        selectFeatureZona = [feature];
+    }
+    
     function featAdded() {
         
         var el = document.getElementById('text');
@@ -199,7 +214,6 @@ function filtroTipo(){
     var filterVenta;
     var venta = "FALSE";
     var alquiler = "FALSE";
-    var VentaAlquiler;
     var attributeTransaccion = PF('selectVentaAlquiler').value;
     
     if(attributeTransaccion !== undefined || attributeTransaccion !== ""){
@@ -277,6 +291,7 @@ function seleccionarPropiedad(){
 }
 
 function crearZonaInteres(){
+    selectFeatureZona = null;
     desactivarControles();
     drawControls.polygon.activate();
 }
@@ -284,6 +299,11 @@ function crearZonaInteres(){
 function eliminarPropiedad(){
     desactivarControles();
     drawControls.delete.activate();
+}
+
+function eliminarZona(){
+    desactivarControles();
+    drawControls.deleteZona.activate();
 }
 
 function desactivarControles(){
@@ -298,6 +318,9 @@ function desactivarControles(){
     }
     if(drawControls.polygon.active){
         drawControls.polygon.deactivate();
+    }
+    if(drawControls.deleteZona.active){
+        drawControls.deleteZona.deactivate();
     }
 }
 
@@ -453,7 +476,9 @@ function accion(feature){
     }else if(drawControls.delete.active){
         deletePropiedad();
     }else if(drawControls.polygon.active){
-        crearZonaInteres();
+        zonaCrecimiento();
+    }else if(drawControls.deleteZona.active){
+        EliminarZonaCrecimiento();
     }
 }
 
@@ -465,6 +490,22 @@ function deletePropiedad(){
     document.load();
 }
 
-function crearZonaInteres(){
+function EliminarZonaCrecimiento(){
+    var feature = selectFeatureZona[0];
+    feature.state = OpenLayers.State.DELETE;
+    saveStrategy.save();
+    document.load();
+}
+
+function zonaCrecimiento(){
+    var demanda = PF('selectdemanda').value;
+    var tamanio = wfsZonaInteres.features.length;
+    var features = wfsZonaInteres.features;
+    var feature = features[tamanio-1];
     
+    feature.attributes.state = OpenLayers.State.INSERT;
+    feature.attributes['tipo'] = demanda;
+    saveStrategy.save();
+    document.load();
+        
 }
