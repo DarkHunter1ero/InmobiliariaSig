@@ -23,7 +23,9 @@ function init(){
     
     saveStrategy = new OpenLayers.Strategy.Save();
     filterStrategy = new OpenLayers.Strategy.Filter();
-    wfsPropiedad = new OpenLayers.Layer.Vector('Propiedades', {
+    wfsPropiedad = new OpenLayers.Layer.Vector('Propiedades', { styleMap: new OpenLayers.StyleMap({ 
+                                    "default": 'Propiedad' 
+                                }), 
         strategies: [new OpenLayers.Strategy.BBOX, saveStrategy, filterStrategy],
         protocol: new OpenLayers.Protocol.WFS({
             url: 'http://localhost:8080/geoserver/InmobiliariaTsig/wfs/',
@@ -35,7 +37,8 @@ function init(){
             version: '1.1.0'
         })
     });
- 
+
+
     wfsZonaInteres = new OpenLayers.Layer.Vector('Zona de Interes', {
         strategies: [new OpenLayers.Strategy.BBOX, saveStrategy],
         protocol: new OpenLayers.Protocol.WFS({
