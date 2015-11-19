@@ -9,24 +9,37 @@
     <ui:composition template="/Inicio.xhtml">
         <ui:define name="centro">
             <h:form id="FormUserLog">
-                <h:panelGroup id="display" layout="span">
-                    <p:panelGrid columns="5" style="text-align: center; margin: auto;">
-                        <p:commandLink action="#" onclick="seleccionarPropiedad();" style="width: 30px; height: 30px">
-                            <h:graphicImage name="image/Icono_seleccionar.jpg" style="width: 30px; height: 30px"/>
-                        </p:commandLink>
-                        <p:commandLink action="#{controladorBtn.dibujarCasa()}" onclick="dibujarPropiedad();" style="width: 30px; height: 30px">
-                            <h:graphicImage name="image/Icono_casa.png" style="width: 30px; height: 30px"/>
-                        </p:commandLink>
-                        <p:commandLink action="#" onclick="eliminarPropiedad();" style="width: 40px; height: 30px">
-                            <h:graphicImage name="image/Icono_Eliminar_Prop.png" style="width: 40px; height: 30px"/>
-                        </p:commandLink>
-                        <p:commandLink action="#{controladorBtn.dibujarZona()}" onclick="crearZonaInteres();" style="width: 30px; height: 30px">
-                            <h:graphicImage name="image/Icono_Poligono.png" style="width: 30px; height: 30px"/>
-                            
-                        </p:commandLink>
-                        <p:commandLink action="#" onclick="eliminarZona();" style="width: 40px; height: 30px">
-                            <h:graphicImage name="image/Icono_Eliminar_Zona.png" style="width: 40px; height: 30px"/>
-                        </p:commandLink>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="GestionPropiedad.xhtml">Propiedades</a></li>
+                    <li><a href="GestionarZona.xhtml">Zonas</a></li>
+                </ul>
+                <h:panelGroup id="display" >
+                    <p:panelGrid style="text-align: center; margin: auto;">
+                        <f:facet name="header">
+                            <p:row>
+                                <p:column colspan="3" style="font-weight: bold;">
+                                    Herramientas
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                        <p:row>
+                            <p:column>
+                                <p:commandLink action="#" onclick="seleccionarPropiedad();" style="width: 30px; height: 30px">
+                                    <h:graphicImage name="image/Icono_seleccionar.jpg" style="width: 30px; height: 30px"/>
+                                </p:commandLink>
+                            </p:column>
+                            <p:column >
+                                <p:commandLink action="#{controladorBtn.dibujarCasa()}" onclick="dibujarPropiedad();" style="width: 30px; height: 30px">
+                                    <h:graphicImage name="image/Icono_casa.png" style="width: 30px; height: 30px"/>
+                                </p:commandLink>
+                            </p:column>
+                            <p:column>
+                                
+                                <p:commandLink action="#" onclick="eliminarPropiedad();" style="width: 40px; height: 30px">
+                                    <h:graphicImage name="image/Icono_Eliminar_Prop.png" style="width: 40px; height: 30px"/>
+                                </p:commandLink>
+                            </p:column>
+                        </p:row>
                     </p:panelGrid>
                     
                     <p:panelGrid columns="2"  style="text-align: center; margin: auto;">
@@ -76,15 +89,6 @@
                             </p:selectOneMenu> 
                             <p:outputLabel value="Coordenadas:" for="text" />
                             <h:inputText disabled="true" id="text" value="no set" />
-                        </p:panelGrid>
-                        <p:panelGrid id="gridZona" columns="3"  style="text-align: center; margin: auto;">
-                            <p:outputLabel value="Demanda:" for="demanda" />
-                            <p:selectOneMenu id="demanda" widgetVar="selectdemanda" >
-                                <f:selectItem itemLabel="Seleccione..." itemValue="" />
-                                <f:selectItem itemLabel="Baja" itemValue="Baja" />
-                                <f:selectItem itemLabel="Media" itemValue="Media" />
-                                <f:selectItem itemLabel="Alta" itemValue="Alta" />
-                            </p:selectOneMenu> 
                         </p:panelGrid>
                         <p:panelGrid columns="3"  style="text-align: center; margin: auto;">
                             <p:commandButton action="#" value="Guardar" onclick="accion();" >     

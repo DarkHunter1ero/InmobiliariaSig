@@ -62,7 +62,7 @@ public class LoginController implements Serializable{
             usuarioController.setSelected(ejbFacade.findByNick(nick));
             General.JsfUtil.addSuccessMessage("Usuario logeado correctamente");
             ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-            context.redirect(context.getRequestContextPath() + "/Administrador/Backend.xhtml");
+            context.redirect(context.getRequestContextPath() + "/Administrador/GestionPropiedad.xhtml");
         }else{
             General.JsfUtil.addSuccessMessage("Error al intentar autenticarse");
             ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();

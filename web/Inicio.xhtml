@@ -8,8 +8,9 @@
       xmlns:p="http://primefaces.org/ui" 
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     
-    
     <h:head>
+        
+        
         <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
         <h:outputStylesheet library="css" name="jsfcrud.css"/>
         
@@ -25,27 +26,30 @@
         <script type="text/javascript" src="#{request.contextPath}/OpenLayer/OpenLayers.js"/>
         <script type="text/javascript" src="#{request.contextPath}/resources/IncludeMapa.js"/>
         
-<!--        <style>
-            .ui-layout-pane-north.ui-widget-content{
-                border: 0;
-            }
-            
-            .ui-layout-pane-south.ui-widget-content{
-                border: 0;
-            }
-            
-            .ui-layout-pane-east.ui-widget-content{
-                border: 0;
-            }
-            
-            .ui-layout-pane-west.ui-widget-content{
-                border: 0;
-            }
-            
-            .ui-layout-pane-center.ui-widget-content{
-                border: 0;
-            }
-        </style>-->
+        
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <!--        <style>
+                    .ui-layout-pane-north.ui-widget-content{
+                        border: 0;
+                    }
+                    
+                    .ui-layout-pane-south.ui-widget-content{
+                        border: 0;
+                    }
+                    
+                    .ui-layout-pane-east.ui-widget-content{
+                        border: 0;
+                    }
+                    
+                    .ui-layout-pane-west.ui-widget-content{
+                        border: 0;
+                    }
+                    
+                    .ui-layout-pane-center.ui-widget-content{
+                        border: 0;
+                    }
+                </style>-->
         
     </h:head>
     
@@ -59,11 +63,14 @@
             
             <p:layoutUnit position="center" gutter="0"> 
                 <p:growl id="growl" life="3000" />
+                
                 <ui:insert name="centro"/>
             </p:layoutUnit>
+            
             <p:layoutUnit position="west" size="250" header="Filtros" gutter="0" collapsible="true">
                 <ui:include src="/Cliente/Filtros.xhtml"/>
             </p:layoutUnit>
+            
             <div align="center">
                 <p:layoutUnit position="south" size="75" closable="false" collapsible="false" gutter="0">
                     <p:outputLabel style=" alignment-adjust: central; font-family: Segoe UI, Helvetica, Arial, sans-serif; color: #e3ddc9;font-size:12px; font-weight: bold;">

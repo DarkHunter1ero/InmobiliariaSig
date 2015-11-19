@@ -1,8 +1,4 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 document.write("<script type='text/javascript' src='OpenLayer/OpenLayers.js'></script>");
 var map, drawControls, saveStrategy, wfsPropiedad, selectFeature, wfsZonaInteres, selectFeatureZona;
 
@@ -17,7 +13,7 @@ function init(){
     var wmsEjes = new OpenLayers.Layer.WMS('Ejes de calles','http://localhost:8080/geoserver/wms/',{layers: 'Ejes'},{});
     var wmsPropiedad = new OpenLayers.Layer.WMS('Propiedades','http://localhost:8080/geoserver/wms/',{layers: 'Propiedad', transparent: true},{isBaseLayer: false});
     var wmsZonaCrecimiento = new OpenLayers.Layer.WMS('Zona Interes','http://localhost:8080/geoserver/wms/',{layers: 'ZonaInteres', transparent: true},{isBaseLayer: false});
-    var wmsNegocios = new OpenLayers.Layer.WMS('Comercios','http://localhost:8080/geoserver/wms/',{layers: 'negocios', transparent: true},{isBaseLayer: true});
+//    var wmsNegocios = new OpenLayers.Layer.WMS('Comercios','http://localhost:8080/geoserver/wms/',{layers: 'negocios', transparent: true},{isBaseLayer: true});
     saveStrategy = new OpenLayers.Strategy.Save();
     filterStrategy = new OpenLayers.Strategy.Filter();
     wfsPropiedad = new OpenLayers.Layer.Vector('Propiedades', {
@@ -46,7 +42,7 @@ function init(){
         })
     });
     
-    map.addLayers([google_satellite, wmsZonaCrecimiento, wmsEjes, wmsPropiedad, wfsZonaInteres, wfsPropiedad, wmsNegocios]);
+    map.addLayers([google_satellite, wmsZonaCrecimiento, wmsEjes, wmsPropiedad, wfsZonaInteres, wfsPropiedad]);
     map.addControl(new OpenLayers.Control.LayerSwitcher());
     
     drawControls = {
