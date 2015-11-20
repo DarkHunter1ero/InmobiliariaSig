@@ -1,8 +1,6 @@
 
 document.write("<script type='text/javascript' src='OpenLayer/OpenLayers.js'></script>");
 var map, drawControls, saveStrategy, wfsPropiedad, selectFeature, wfsZonaInteres, selectFeatureZona, select, wmsPropiedad;
-
-OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
 function init(){
     var google_satellite = new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.HYBRID});
     var proj_900913 = new OpenLayers.Projection('EPSG:900913');
@@ -16,11 +14,17 @@ function init(){
     var wmsNegocios = new OpenLayers.Layer.WMS('Comercios','http://localhost:8080/geoserver/wms/',{layers: 'negocios', transparent: true},{isBaseLayer: false});
     var wmsTransporte = new OpenLayers.Layer.WMS('Transporte ','http://localhost:8080/geoserver/wms/',{layers: 'ServTransporteRecreacion', transparent: true},{isBaseLayer: false});
     var wmsServiciosPublicos = new OpenLayers.Layer.WMS('Servicios Publicos ','http://localhost:8080/geoserver/wms/',{layers: 'ServiciosPublicos', transparent: true},{isBaseLayer: false});
-    
+                     
+    var filterEstado=OpenLayers.Filter.Comparison.EQUAL_TO;
     saveStrategy = new OpenLayers.Strategy.Save();
     filterStrategy = new OpenLayers.Strategy.Filter();
     wfsPropiedad = new OpenLayers.Layer.Vector('Propiedades', {
         strategies: [new OpenLayers.Strategy.BBOX, saveStrategy, filterStrategy],
+        filter: new OpenLayers.Filter.Comparison({ 
+            type: filterEstado,
+            property: 'estado',
+            value: 'Publica'
+        }),
         protocol: new OpenLayers.Protocol.WFS({
             url: 'http://localhost:8080/geoserver/InmobiliariaTsig/wfs/',
             srsName: proj_900913,
@@ -31,8 +35,7 @@ function init(){
             version: '1.1.0'
         })
     });
-    
-    
+  
     wfsZonaInteres = new OpenLayers.Layer.Vector('Zona de Interes', {
         strategies: [new OpenLayers.Strategy.BBOX, saveStrategy],
         protocol: new OpenLayers.Protocol.WFS({
@@ -48,8 +51,7 @@ function init(){
     
     map.addLayers([google_satellite, wmsZonaCrecimiento, wmsEjes, wmsPropiedad, wfsZonaInteres, wfsPropiedad, wmsNegocios, wmsTransporte, wmsServiciosPublicos]);
     map.addControl(new OpenLayers.Control.LayerSwitcher());
-    
-    
+
     drawControls = {
         point: new OpenLayers.Control.DrawFeature(
                 wfsPropiedad, OpenLayers.Handler.Point
@@ -59,7 +61,7 @@ function init(){
         //       ),
         
         select: new OpenLayers.Control.SelectFeature(
-                wfsPropiedad,
+                wfsPropiedad, 
         {
             clickout: false, toggle: false,
             multiple: false, hover: false,

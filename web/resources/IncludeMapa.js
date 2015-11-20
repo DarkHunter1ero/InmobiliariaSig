@@ -1,7 +1,7 @@
 
 document.write("<script type='text/javascript' src='OpenLayer/OpenLayers.js'></script>");
 var map, drawControls, saveStrategy, wfsPropiedad, selectFeature, wfsZonaInteres, selectFeatureZona;
-
+var wfsNroPuerta, saveStrategyPoligon;
 OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
 function init(){
     var google_satellite = new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.HYBRID});
@@ -42,6 +42,19 @@ function init(){
             featurePrefix: 'InmobiliariaTsig',
             featureNS: 'InmobiliariaTsig',
             featureType: 'ZonaInteres',
+            geometryName: 'the_geom',
+            version: '1.1.0'
+        })
+    });
+
+    wfsNroPuerta = new OpenLayers.Layer.Vector('Propiedades', {
+        strategies: [new OpenLayers.Strategy.Fixed],
+        protocol: new OpenLayers.Protocol.WFS({
+            url: 'http://localhost:8080/geoserver/InmobiliariaTsig/wfs/',
+            srsName: proj_900913,
+            featurePrefix: 'InmobiliariaTsig',
+            featureNS: 'InmobiliariaTsig',
+            featureType: 'San_Jose_num_puertas',
             geometryName: 'the_geom',
             version: '1.1.0'
         })
@@ -167,6 +180,7 @@ function init(){
         }
         document.getElementById('FormPropiedad:text').value = feature.fid;
         PF('selecttipo').selectValue(feature.attributes['tipo']);
+        
     }
     
     function cargarZona(feature){
