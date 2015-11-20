@@ -18,10 +18,9 @@ function init(){
     var wmsServiciosPublicos = new OpenLayers.Layer.WMS('Servicios Publicos ','http://localhost:8080/geoserver/wms/',{layers: 'ServiciosPublicos', transparent: true},{isBaseLayer: false});
     
     saveStrategy = new OpenLayers.Strategy.Save();
+    saveStrategyPoligon = new OpenLayers.Strategy.Save();
     filterStrategy = new OpenLayers.Strategy.Filter();
-    wfsPropiedad = new OpenLayers.Layer.Vector('Propiedades', { styleMap: new OpenLayers.StyleMap({ 
-                                    "default": 'Propiedad' 
-                                }), 
+    wfsPropiedad = new OpenLayers.Layer.Vector('Propiedades', {
         strategies: [new OpenLayers.Strategy.BBOX, saveStrategy, filterStrategy],
         protocol: new OpenLayers.Protocol.WFS({
             url: 'http://localhost:8080/geoserver/InmobiliariaTsig/wfs/',
@@ -36,7 +35,7 @@ function init(){
 
 
     wfsZonaInteres = new OpenLayers.Layer.Vector('Zona de Interes', {
-        strategies: [new OpenLayers.Strategy.BBOX, saveStrategy],
+        strategies: [new OpenLayers.Strategy.BBOX, saveStrategyPoligon],
         protocol: new OpenLayers.Protocol.WFS({
             url: 'http://localhost:8080/geoserver/InmobiliariaTsig/wfs/',
             srsName: proj_900913,
@@ -140,12 +139,12 @@ function init(){
         }else{
             PF('selectVenta').uncheck();
         }
-        document.getElementById('barrio').value = feature.attributes['barrio'];
-        document.getElementById('precio').value = feature.attributes['precio'];
-        document.getElementById('dormitorio').value = feature.attributes['cantDormit'];
-        document.getElementById('banio').value = feature.attributes['cantBanio'];
-        document.getElementById('m2construido').value = feature.attributes['construido'];
-        document.getElementById('m2terreno').value = feature.attributes['padronM2'];
+        document.getElementById('FormPropiedad:barrio').value = feature.attributes['barrio'];
+        document.getElementById('FormPropiedad:precio').value = feature.attributes['precio'];
+        document.getElementById('FormPropiedad:dormitorio').value = feature.attributes['cantDormit'];
+        document.getElementById('FormPropiedad:banio').value = feature.attributes['cantBanio'];
+        document.getElementById('FormPropiedad:m2construido').value = feature.attributes['construido'];
+        document.getElementById('FormPropiedad:m2terreno').value = feature.attributes['padronM2'];
         if(feature.attributes['parrillero'] === 'TRUE'){
             PF('selectParrilla').check();
         }else{
@@ -166,7 +165,7 @@ function init(){
         }else{
             PF('selectCalefaccion').uncheck();
         }
-        document.getElementById('text').value = feature.fid;
+        document.getElementById('FormPropiedad:text').value = feature.fid;
         PF('selecttipo').selectValue(feature.attributes['tipo']);
     }
     
@@ -176,7 +175,7 @@ function init(){
     
     function featAdded() {
         
-        var el = document.getElementById('text');
+        var el = document.getElementById('FormPropiedad:text');
         
         /*  if(wfsPropiedad.features.length > 1){
                             wfsPropiedad.removeFeatures(wfsPropiedad.features[0]);   
@@ -342,12 +341,12 @@ function crearPropiedad(){
     }else{
         venta = 'FALSE';
     }
-    var barrio = document.getElementById('barrio').value;
-    var precio = document.getElementById('precio').value;
-    var dormitorio = document.getElementById('dormitorio').value;
-    var banio = document.getElementById('banio').value;
-    var m2construido = document.getElementById('m2construido').value;
-    var m2terreno = document.getElementById('m2terreno').value;
+    var barrio = document.getElementById('FormPropiedad:barrio').value;
+    var precio = document.getElementById('FormPropiedad:precio').value;
+    var dormitorio = document.getElementById('FormPropiedad:dormitorio').value;
+    var banio = document.getElementById('FormPropiedad:banio').value;
+    var m2construido = document.getElementById('FormPropiedad:m2construido').value;
+    var m2terreno = document.getElementById('FormPropiedad:m2terreno').value;
     
     var parrilla;
     if(PF('selectParrilla').isChecked()){
@@ -414,13 +413,13 @@ function modificarPropiedad(){
     }else{
         venta = 'FALSE';
     }
-    var barrio = document.getElementById('barrio').value;
-    var precio = document.getElementById('precio').value;
-    var dormitorio = document.getElementById('dormitorio').value;
-    var banio = document.getElementById('banio').value;
-    var m2construido = document.getElementById('m2construido').value;
-    var m2terreno = document.getElementById('m2terreno').value;
-    var fid = document.getElementById('text').value;
+    var barrio = document.getElementById('FormPropiedad:barrio').value;
+    var precio = document.getElementById('FormPropiedad:precio').value;
+    var dormitorio = document.getElementById('FormPropiedad:dormitorio').value;
+    var banio = document.getElementById('FormPropiedad:banio').value;
+    var m2construido = document.getElementById('FormPropiedad:m2construido').value;
+    var m2terreno = document.getElementById('FormPropiedad:m2terreno').value;
+    var fid = document.getElementById('FormPropiedad:text').value;
     var parrilla;
     if(PF('selectParrilla').isChecked()){
         parrilla = 'TRUE';
@@ -495,7 +494,7 @@ function deletePropiedad(){
 function EliminarZonaCrecimiento(){
     var feature = selectFeatureZona[0];
     feature.state = OpenLayers.State.DELETE;
-    saveStrategy.save();
+    saveStrategyPoligon.save();
     document.load();
 }
 
@@ -507,7 +506,7 @@ function zonaCrecimiento(){
     
     feature.attributes.state = OpenLayers.State.INSERT;
     feature.attributes['tipo'] = demanda;
-    saveStrategy.save();
+    saveStrategyPoligon.save();
     document.load();
         
 }

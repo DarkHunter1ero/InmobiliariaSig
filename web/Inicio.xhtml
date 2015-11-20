@@ -24,7 +24,6 @@
         
         <script src="http://maps.google.com/maps/api/js?v=3.5"/>
         <script type="text/javascript" src="#{request.contextPath}/OpenLayer/OpenLayers.js"/>
-        <script type="text/javascript" src="#{request.contextPath}/resources/IncludeMapa.js"/>
         
         
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
@@ -53,7 +52,7 @@
         
     </h:head>
     
-    <h:body id="BodyInicio" onload="init()">
+    <h:body id="BodyInicio">
         
         <p:layout fullPage="true" id="FormInicio">
             
@@ -62,8 +61,7 @@
             </p:layoutUnit>
             
             <p:layoutUnit position="center" gutter="0"> 
-                <p:growl id="growl" life="3000" />
-                
+                <p:growl id="growl" life="8000" />
                 <ui:insert name="centro"/>
             </p:layoutUnit>
             
