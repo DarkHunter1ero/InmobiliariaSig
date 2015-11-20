@@ -175,12 +175,16 @@ function init(){
     
     function featAdded() {
         
-        var el = document.getElementById('FormPropiedad:text');
+//        var el = document.getElementById('FormPropiedad:text');
+//        
+//        /*  if(wfsPropiedad.features.length > 1){
+//                            wfsPropiedad.removeFeatures(wfsPropiedad.features[0]);   
+//                        }*/
+//        el.value=drawControls.point.handler.point.geometry.x+", "+drawControls.point.handler.point.geometry.y;
         
-        /*  if(wfsPropiedad.features.length > 1){
-                            wfsPropiedad.removeFeatures(wfsPropiedad.features[0]);   
-                        }*/
-        el.value=drawControls.point.handler.point.geometry.x+", "+drawControls.point.handler.point.geometry.y;
+        $('#FormPropiedad\\:text').val(drawControls.point.handler.point.geometry.x+", "+drawControls.point.handler.point.geometry.y);
+        
+        document.getElementById('FormPropiedad:hdnBtn').click();
     }
     
     drawControls.point.featureAdded = featAdded;

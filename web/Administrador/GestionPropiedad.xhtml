@@ -13,6 +13,11 @@
             </h:head>
             <h:body onload="init()">
                 <h:form id="FormPropiedad">
+                    
+                    <h:commandButton id="hdnBtn" value="BuscarDir">
+                        <f:ajax event="click" execute="FormPropiedad:text" listener="#{direccionController.obtenerDireccion()}"/>
+                    </h:commandButton>
+                    
                     <ul class="nav nav-pills">
                         <li class="active"><a href="GestionPropiedad.xhtml">PROPIEDADES</a></li>
                         <li><a href="GestionarZona.xhtml">ZONAS</a></li>
@@ -92,7 +97,7 @@
                                     <f:selectItem itemLabel="Terreno" itemValue="Terreno" />
                                 </p:selectOneMenu> 
                                 <p:outputLabel value="Coordenadas:" for="text" />
-                                <h:inputText disabled="true" id="text" value="no set" />
+                                
                             </p:panelGrid>
                             <p:panelGrid columns="3"  style="text-align: center; margin: auto;">
                                 <p:commandButton action="#" value="Guardar" onclick="accion();" >     
@@ -105,6 +110,7 @@
                             </p:panelGrid>
                         </p:panelGrid>
                     </h:panelGroup>
+                    <h:inputText disabled="true" id="text" value="#{direccionController.coordenadas}"/>
                 </h:form>
             </h:body>
         </ui:define>
