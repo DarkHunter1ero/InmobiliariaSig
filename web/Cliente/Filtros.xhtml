@@ -16,14 +16,22 @@
                     <f:selectItem itemLabel="Apartamento" itemValue="Apartamento" />
                     <f:selectItem itemLabel="Terreno" itemValue="Terreno" />
                 </p:selectOneMenu>
-                <p:outputLabel value="Transaccion:  " for="tipo2" />
-                <p:selectOneMenu id="tipo2" widgetVar="selectVentaAlquiler" >
-                    <f:selectItem itemLabel="Seleccione..." itemValue="" />
-                    <f:selectItem itemLabel="Venta" itemValue="Venta" />
-                    <f:selectItem itemLabel="Alquiler" itemValue="Alquiler" />
-                    <f:selectItem itemLabel="Venta-Alquiler" itemValue="VentaAlquiler" />
-                </p:selectOneMenu>
-                <h:commandButton action="#" onclick="filtroTipo();" value="Filtrar">
+                <p:outputLabel value="Barrio  " for="inputBarrio" />
+                <p:inputText id="inputBarrio" />
+                <p:outputLabel value="Venta  " for="checkVenta" />
+                <p:selectBooleanCheckbox id="checkVenta" widgetVar="checkVenta"  />
+                <p:outputLabel value="Alquiler  " for="checkAlquiler" />
+                <p:selectBooleanCheckbox id="checkAlquiler" widgetVar="checkAlquiler"  />
+                <p:outputLabel value="Parrilla  " for="checkParrilla" />
+                <p:selectBooleanCheckbox id="checkParrilla" widgetVar="checkParrilla"  />
+                <p:outputLabel value="Garage  " for="checkGarage" />
+                <p:selectBooleanCheckbox id="checkGarage" widgetVar="checkGarage"  />
+                <p:outputLabel value="Piscina  " for="checkPiscina" />
+                <p:selectBooleanCheckbox id="checkPiscina" widgetVar="checkPiscina"  />
+                <p:outputLabel value="Calefaccion  " for="checkCalefaccion" />
+                <p:selectBooleanCheckbox id="checkCalefaccion" widgetVar="checkCalefaccion"  />
+                
+                <h:commandButton action="#" onclick="filtrar();" value="Filtrar">
                     <f:ajax event="click" execute="@form"/> 
                 </h:commandButton>
                 <h:commandButton action="#" onclick="resetTipo();" value="reset">

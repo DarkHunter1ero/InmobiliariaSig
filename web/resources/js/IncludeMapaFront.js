@@ -14,7 +14,7 @@ function init(){
     var wmsNegocios = new OpenLayers.Layer.WMS('Comercios','http://localhost:8080/geoserver/wms/',{layers: 'negocios', transparent: true},{isBaseLayer: false});
     var wmsTransporte = new OpenLayers.Layer.WMS('Transporte ','http://localhost:8080/geoserver/wms/',{layers: 'ServTransporteRecreacion', transparent: true},{isBaseLayer: false});
     var wmsServiciosPublicos = new OpenLayers.Layer.WMS('Servicios Publicos ','http://localhost:8080/geoserver/wms/',{layers: 'ServiciosPublicos', transparent: true},{isBaseLayer: false});
-                     
+    
     var filterEstado=OpenLayers.Filter.Comparison.EQUAL_TO;
     saveStrategy = new OpenLayers.Strategy.Save();
     filterStrategy = new OpenLayers.Strategy.Filter();
@@ -33,7 +33,8 @@ function init(){
             featureType: 'Propiedad',
             geometryName: 'the_geom',
             version: '1.1.0'
-        })
+        }),
+        styleMap: new OpenLayers.StyleMap(PropStyle)
     });
   
     wfsZonaInteres = new OpenLayers.Layer.Vector('Zona de Interes', {
@@ -46,7 +47,8 @@ function init(){
             featureType: 'ZonaInteres',
             geometryName: 'the_geom',
             version: '1.1.0'
-        })
+        }),
+        styleMap: new OpenLayers.StyleMap(ZoneStyle)
     });
     
     map.addLayers([google_satellite, wmsZonaCrecimiento, wmsEjes, wmsPropiedad, wfsZonaInteres, wfsPropiedad, wmsNegocios, wmsTransporte, wmsServiciosPublicos]);

@@ -11,12 +11,10 @@ function init(){
     posicion.transform(proj_4326, proj_900913);
     map = new OpenLayers.Map('map', {projection: proj_900913 ,displayProjection: proj_4326, numZoomLevels: 20});
     var wmsEjes = new OpenLayers.Layer.WMS('Ejes de calles','http://localhost:8080/geoserver/wms/',{layers: 'Ejes'},{});
-    var wmsPropiedad = new OpenLayers.Layer.WMS('Propiedades','http://localhost:8080/geoserver/wms/',{layers: 'Propiedad', transparent: true},{isBaseLayer: false});
-    var wmsZonaCrecimiento = new OpenLayers.Layer.WMS('Zona Interes','http://localhost:8080/geoserver/wms/',{layers: 'ZonaInteres', transparent: true},{isBaseLayer: false});
     var wmsNegocios = new OpenLayers.Layer.WMS('Comercios','http://localhost:8080/geoserver/wms/',{layers: 'negocios', transparent: true},{isBaseLayer: false});
     var wmsTransporte = new OpenLayers.Layer.WMS('Transporte ','http://localhost:8080/geoserver/wms/',{layers: 'ServTransporteRecreacion', transparent: true},{isBaseLayer: false});
     var wmsServiciosPublicos = new OpenLayers.Layer.WMS('Servicios Publicos ','http://localhost:8080/geoserver/wms/',{layers: 'ServiciosPublicos', transparent: true},{isBaseLayer: false});
-    
+
     saveStrategy = new OpenLayers.Strategy.Save();
     saveStrategyPoligon = new OpenLayers.Strategy.Save();
     filterStrategy = new OpenLayers.Strategy.Filter();
@@ -30,7 +28,8 @@ function init(){
             featureType: 'Propiedad',
             geometryName: 'the_geom',
             version: '1.1.0'
-        })
+        }),
+        styleMap: new OpenLayers.StyleMap(PropStyle)
     });
 
 
@@ -44,7 +43,8 @@ function init(){
             featureType: 'ZonaInteres',
             geometryName: 'the_geom',
             version: '1.1.0'
-        })
+        }),
+        styleMap: new OpenLayers.StyleMap(ZoneStyle)
     });
 
     wfsNroPuerta = new OpenLayers.Layer.Vector('Propiedades', {
@@ -60,7 +60,7 @@ function init(){
         })
     });
     
-    map.addLayers([google_satellite, wmsZonaCrecimiento, wmsEjes, wmsPropiedad, wfsZonaInteres, wfsPropiedad, wmsNegocios, wmsTransporte, wmsServiciosPublicos]);
+    map.addLayers([google_satellite, wmsEjes, wfsZonaInteres, wfsPropiedad, wmsNegocios, wmsTransporte, wmsServiciosPublicos]);
     map.addControl(new OpenLayers.Control.LayerSwitcher());
     
     drawControls = {
@@ -189,12 +189,12 @@ function init(){
     
     function featAdded() {
         
-//        var el = document.getElementById('FormPropiedad:text');
-//        
-//        /*  if(wfsPropiedad.features.length > 1){
-//                            wfsPropiedad.removeFeatures(wfsPropiedad.features[0]);   
-//                        }*/
-//        el.value=drawControls.point.handler.point.geometry.x+", "+drawControls.point.handler.point.geometry.y;
+        //        var el = document.getElementById('FormPropiedad:text');
+        //        
+        //        /*  if(wfsPropiedad.features.length > 1){
+        //                            wfsPropiedad.removeFeatures(wfsPropiedad.features[0]);   
+        //                        }*/
+        //        el.value=drawControls.point.handler.point.geometry.x+", "+drawControls.point.handler.point.geometry.y;
         
         $('#FormPropiedad\\:text').val(drawControls.point.handler.point.geometry.x+", "+drawControls.point.handler.point.geometry.y);
         
@@ -270,7 +270,7 @@ function filtroTipo(){
         var filterVentaAlquiler = new OpenLayers.Filter.Logical({
             type: OpenLayers.Filter.Logical.AND,
             filters: [filterVenta, filterAlquiler]});
- 
+        
     }
     if(attributeTipo !== undefined && attributeTransaccion !== undefined || attributeTipo !== "" && attributeTransaccion !== "" ){
         var filterLogical = new OpenLayers.Filter.Logical({
@@ -294,6 +294,109 @@ function filtroTipo(){
     wfsPropiedad.refresh({force: true});
     wfsPropiedad.redraw();
     
+}
+
+function filtrar(){
+    var type = OpenLayers.Filter.Comparison.LIKE;
+    var attributeTipo = PF('selectTipo').value;
+    var inputBarrio = document.getElementById('FormFiltros:inputBarrio').value;
+    var checkVenta = PF('checkVenta').isChecked();
+    var checkAlquiler = PF('checkAlquiler').isChecked();
+    var checkParrilla = PF('checkParrilla').isChecked();
+    var checkGarage = PF('checkGarage').isChecked();
+    var checkPiscina = PF('checkPiscina').isChecked();
+    var checkCalefaccion = PF('checkCalefaccion').isChecked();
+    
+    var filterLogical = new OpenLayers.Filter.Logical({
+        type: OpenLayers.Filter.Logical.AND});
+    
+    var pocicionArray =0;
+    
+    if(attributeTipo !== undefined && attributeTipo !== "" ){
+        var filterTipo = new OpenLayers.Filter.Comparison({
+            type: type,
+            property: 'tipo',
+            value: attributeTipo
+        });
+        filterLogical.filters[pocicionArray]=filterTipo;
+        pocicionArray++;
+    }
+    
+    if(inputBarrio !== undefined){
+        var filterBarrio = new OpenLayers.Filter.Comparison({
+            type: type,
+            property: 'barrio',
+            value: inputBarrio
+        });
+        filterLogical.filters[pocicionArray]=filterBarrio;
+        pocicionArray++;
+    }
+    
+    if(checkVenta !== undefined && checkVenta === true ){
+        var filterCompra = new OpenLayers.Filter.Comparison({
+            type: type,
+            property: 'compra',
+            value: checkVenta
+        });
+        filterLogical.filters[pocicionArray]=filterCompra;
+        pocicionArray++;
+    }
+    
+    if(checkAlquiler !== undefined && checkAlquiler === true){
+        var filterAlquiler = new OpenLayers.Filter.Comparison({
+            type: type,
+            property: 'alquiler',
+            value: checkAlquiler
+        });
+        filterLogical.filters[pocicionArray]=filterAlquiler;
+        pocicionArray++;
+    }
+    
+    if(checkParrilla !== undefined && checkParrilla === true ){
+        var filterParrillero = new OpenLayers.Filter.Comparison({
+            type: type,
+            property: 'parrillero',
+            value: checkParrilla
+        });
+        filterLogical.filters[pocicionArray]=filterParrillero;
+        pocicionArray++;
+    }
+    
+    if(checkGarage !== undefined && checkGarage === true){
+        var filterGarage = new OpenLayers.Filter.Comparison({
+            type: type,
+            property: 'garage',
+            value: checkGarage
+        });
+        filterLogical.filters[pocicionArray]=filterGarage;
+        pocicionArray++;
+    }
+    
+    if(checkPiscina !== undefined && checkPiscina === true){
+        var filterPiscina = new OpenLayers.Filter.Comparison({
+            type: type,
+            property: 'piscina',
+            value: checkPiscina
+        });
+        filterLogical.filters[pocicionArray]=filterPiscina;
+        pocicionArray++;
+    }
+    
+    if(checkCalefaccion !== undefined && checkCalefaccion === true ){
+        var filterCalefaccion = new OpenLayers.Filter.Comparison({
+            type: type,
+            property: 'calefaccio',
+            value: checkCalefaccion
+        });
+        filterLogical.filters[pocicionArray]=filterCalefaccion;
+        pocicionArray++;
+    }
+    
+    
+    filterStrategy.setFilter(filterLogical);
+    filterStrategy.activate(); 
+    wfsPropiedad.refresh({force: true});
+    wfsPropiedad.redraw();
 }
  
  
