@@ -100,3 +100,36 @@ function filtrar(){
     wfsPropiedad.refresh({force: true});
     wfsPropiedad.redraw();
 }
+
+function filtroSitioInteres(){
+    var filterAvanzado;
+    
+    var filterLogical = new OpenLayers.Filter.Logical({
+    type: OpenLayers.Filter.Logical.OR});
+
+    var pocicionArray =0;
+    
+    
+    var arregloDirecc = document.getElementById('FormFiltrosAvanzados:arregloDirecc').value;
+    if(arregloDirecc !== ""){
+        
+        var result = arregloDirecc.split(",");
+    
+        for (var i=0; i<result.length; i++) { 
+            filterAvanzado = new OpenLayers.Filter.Comparison({
+                type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                property: 'direccion',
+                value: result[i]
+            });
+            filterLogical.filters[pocicionArray]=filterAvanzado;
+            pocicionArray++;
+        }
+
+        filterStrategy.setFilter(filterLogical);
+        filterStrategy.activate();
+        wfsPropiedad.refresh({force: true});
+        wfsPropiedad.redraw();
+    }
+}
+
+function activarBtn(){document.getElementById('FormFiltrosAvanzados:btnBean').click();}

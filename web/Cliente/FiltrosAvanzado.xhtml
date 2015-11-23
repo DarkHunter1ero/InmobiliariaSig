@@ -4,28 +4,32 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
           
     <ui:composition>
         <h:form id="FormFiltrosAvanzados">
             <p:panelGrid columns="2">
                 <p:outputLabel value="Comercios:" for="comercios" />
-                <p:selectBooleanCheckbox id="comercios" widgetVar="selectComercios"/>
+                <p:selectBooleanCheckbox id="comercios" value="#{direccionController.comercios}"/>
                 <p:outputLabel value="Centro Educativo:" for="centroEducativo" />
-                <p:selectBooleanCheckbox id="centroEducativo" widgetVar="selectCentroEducativo"/>
+                <p:selectBooleanCheckbox id="centroEducativo" value="#{direccionController.centroEducativo}"/>
                 <p:outputLabel value="Servicio Transporte:" for="servicioTransporte" />
-                <p:selectBooleanCheckbox id="servicioTransporte" widgetVar="selectServicioTransporte"/> 
+                <p:selectBooleanCheckbox id="servicioTransporte" value="#{direccionController.serTransporte}"/> 
                 <p:outputLabel value="Empresas Publicas:" for="empresasPublicas" />
-                <p:selectBooleanCheckbox id="empresasPublicas" widgetVar="selectEmpresasPublicas"/> 
+                <p:selectBooleanCheckbox id="empresasPublicas" value="#{direccionController.servPublicos}"/> 
                 <p:outputLabel value="Distancia " for="distancia" />
-                <p:inputText id="distancia" style="width: 80px;"/>
-                <h:commandButton action="#" onclick="filtroTipo();" value="Filtro avanzado">
-                    <f:ajax event="click" execute="@form"/> 
+                <p:inputText id="distancia" style="width: 80px;" value="#{direccionController.distancia}"/>
+                <h:commandButton value="Filtro avanzado" >
+                    <f:ajax event="click" execute="@form" render=":FormFiltrosAvanzados:arregloDirecc" listener="#{direccionController.filtroAvanzado()}" onevent="activarBtn"/>
                 </h:commandButton>
                 <h:commandButton action="#" onclick="resetTipo();" value="Reset">
-                    <f:ajax event="click" execute="@form"/> 
                 </h:commandButton>
+                <h:inputText id="arregloDirecc" value="#{direccionController.prueba}" style="display: none"></h:inputText>
             </p:panelGrid>
+            <h:commandLink  id="btnBean" value="dsfadsfadsf" onclick="filtroSitioInteres();" style="display: none">
+                <f:ajax event="click" execute="@all"/>
+            </h:commandLink> 
         </h:form>
     </ui:composition>
 </html>
