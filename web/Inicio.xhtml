@@ -68,9 +68,20 @@
                 <ui:insert name="centro"/>
             </p:layoutUnit>
             
-            <p:layoutUnit position="west" size="250" header="Filtros" gutter="0" collapsible="true">
-                <ui:include src="/Cliente/Filtros.xhtml"/>
-            </p:layoutUnit>
+            <p:layoutUnit position="west" size="300" header="Menu Filtros" gutter="0" collapsible="true">
+                  <p:panelMenu style="width:300px">
+                    <p:submenu label="Filtrar por Atributos">
+                        <p:menuitem >
+                            <ui:include src="/Cliente/Filtros.xhtml"/>
+                        </p:menuitem>
+                    </p:submenu>
+                    <p:submenu label="Fitrar por distancias" >
+                        <p:menuitem >
+                           <ui:include src="/Cliente/FiltrosAvanzado.xhtml"/>
+                        </p:menuitem>
+                    </p:submenu>
+                </p:panelMenu>
+            </p:layoutUnit>   
             
             <div align="center">
                 <p:layoutUnit position="south" size="75" closable="false" collapsible="false" gutter="0">

@@ -8,6 +8,9 @@
     
     <ui:composition template="/Inicio.xhtml">
         <ui:define name="centro">
+            <h:head>
+                <h:outputScript library="js" name="ABMPropiedad.js"/>
+            </h:head>
             <h:body onload="init()">
                 <h:form id="FormPropiedad">
                     
@@ -52,8 +55,9 @@
                             <div id="map" style="width: 900px; height: 700px;"></div>
                             
                             <p:panelGrid columns="2">
+                                <p:outputLabel value="Direccion: " for="direccion" />
+                                <p:inputText id="direccion" value="#{direccionController.direccion}"/>
                                 <p:outputLabel value="Estado: " for="estado" />
-                                
                                 <p:selectOneMenu id="estado" widgetVar="selectEstado" >
                                     <f:selectItem itemLabel="Seleccione..." itemValue="" />
                                     <f:selectItem itemLabel="Reservada" itemValue="Reservada" />

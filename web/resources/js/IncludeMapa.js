@@ -1,13 +1,13 @@
 
 document.write("<script type='text/javascript' src='OpenLayer/OpenLayers.js'></script>");
-var map, drawControls, saveStrategy, wfsPropiedad, selectFeature, wfsZonaInteres, selectFeatureZona;
+var map, drawControls, saveStrategy, wfsPropiedad, selectFeature, wfsZonaInteres, selectFeatureZona, proj_900913, proj_4326, posicion;
 var wfsNroPuerta, saveStrategyPoligon;
 OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
 function init(){
     var google_satellite = new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.HYBRID});
-    var proj_900913 = new OpenLayers.Projection('EPSG:900913');
-    var proj_4326 = new OpenLayers.Projection('EPSG:4326');
-    var posicion = new OpenLayers.LonLat(-56.71361, -34.3375);
+    proj_900913 = new OpenLayers.Projection('EPSG:900913');
+    proj_4326 = new OpenLayers.Projection('EPSG:4326');
+    posicion = new OpenLayers.LonLat(-56.71361, -34.3375);
     posicion.transform(proj_4326, proj_900913);
     map = new OpenLayers.Map('map', {projection: proj_900913 ,displayProjection: proj_4326, numZoomLevels: 20});
     var wmsEjes = new OpenLayers.Layer.WMS('Ejes de calles','http://localhost:8080/geoserver/wms/',{layers: 'Ejes'},{});
@@ -121,6 +121,7 @@ function init(){
         feature.geometry.getBounds().getCenterLonLat(),
         new OpenLayers.Size(100,100),
         "<div> estado: "+feature.attributes['estado']+"</div></br>"+
+                "<div> direccion: "+feature.attributes['direccion']+"</div></br>"+
                 "<div> alquiler: "+feature.attributes['alquiler']+"</div></br>"+
                 "<div> venta: "+feature.attributes['compra']+"</div></br>"+
                 "<div> barrio: "+feature.attributes['barrio']+"</div></br>"+
@@ -133,7 +134,8 @@ function init(){
                 "<div> garage: "+feature.attributes['garage']+"</div></br>"+
                 "<div> piscina: "+feature.attributes['piscina']+"</div></br>"+
                 "<div> calefaccion: "+feature.attributes['calefaccion']+"</div></br>"+
-                "<div> tipo: "+feature.attributes['tipo']+"</div></br>",
+                "<div> tipo: "+feature.attributes['tipo']+"</div></br>"+
+                "<div> Detalle: <a href='#' onclick='propiedadUnica();'>click me</a></div></br>",
         null, true );
         feature.popup = popup;
         //        popup.setOpacity(0.7);
@@ -142,6 +144,7 @@ function init(){
         selectFeature = [feature];
         
         PF('selectEstado').selectValue(feature.attributes['estado']);
+        document.getElementById('FormPropiedad:direccion').value = feature.attributes['direccion'];
         if(feature.attributes['alquiler'] === 'TRUE'){
             PF('selectAlquiler').check();
         }else{
@@ -216,191 +219,6 @@ function dibujarPropiedad(){
     drawControls.point.activate();
 }
 
-function filtroTipo(){
-    
-    var type = OpenLayers.Filter.Comparison.LIKE;
-    attributeTipo = PF('selectTipo').value;
-    if(attributeTipo !== undefined || attributeTipo !== "" ){
-        
-        var filterTipo = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'tipo',
-            value: attributeTipo
-        });
- 
-    }
-    var filterAlquiler;
-    var filterVenta;
-    var venta = "FALSE";
-    var alquiler = "FALSE";
-    var attributeTransaccion = PF('selectVentaAlquiler').value;
-    
-    if(attributeTransaccion !== undefined || attributeTransaccion !== ""){
- 
-        if(attributeTransaccion === "VentaAlquiler"){
-
-            alquiler = "TRUE";
-            venta = "TRUE";
-        }
-        
-        if(attributeTransaccion === "Alquiler" || alquiler === "TRUE"){
-            alquiler = "TRUE";
-        }else{
-            alquiler = "FALSE"; 
-        }
-
-        if(attributeTransaccion === "Venta" || venta === "TRUE"){
-            venta = "TRUE";
-        }else{
-            venta = "FALSE";
-        }
-       
-        var filterAlquiler = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'alquiler',
-            value: alquiler
-        });
-
-        var filterVenta = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'compra',
-            value: venta
-        });
-            
-        var filterVentaAlquiler = new OpenLayers.Filter.Logical({
-            type: OpenLayers.Filter.Logical.AND,
-            filters: [filterVenta, filterAlquiler]});
-        
-    }
-    if(attributeTipo !== undefined && attributeTransaccion !== undefined || attributeTipo !== "" && attributeTransaccion !== "" ){
-        var filterLogical = new OpenLayers.Filter.Logical({
-            type: OpenLayers.Filter.Logical.AND,
-            filters: [filterTipo, filterVentaAlquiler]});
-    }
-    if(attributeTipo !== undefined && attributeTransaccion === undefined || attributeTipo !== "" && attributeTransaccion === ""){
-        var filterLogical = new OpenLayers.Filter.Logical({
-            type: OpenLayers.Filter.Logical.AND,
-            filters: [filterTipo]});
-    }
-    
-    if(attributeTipo === undefined && attributeTransaccion !== undefined || attributeTipo === "" && attributeTransaccion !== ""){
-        var filterLogical = new OpenLayers.Filter.Logical({
-            type: OpenLayers.Filter.Logical.AND,
-            filters: [filterVentaAlquiler]});
-    }
-
-    filterStrategy.setFilter(filterLogical);
-    filterStrategy.activate(); 
-    wfsPropiedad.refresh({force: true});
-    wfsPropiedad.redraw();
-    
-}
-
-function filtrar(){
-    var type = OpenLayers.Filter.Comparison.LIKE;
-    var attributeTipo = PF('selectTipo').value;
-    var inputBarrio = document.getElementById('FormFiltros:inputBarrio').value;
-    var checkVenta = PF('checkVenta').isChecked();
-    var checkAlquiler = PF('checkAlquiler').isChecked();
-    var checkParrilla = PF('checkParrilla').isChecked();
-    var checkGarage = PF('checkGarage').isChecked();
-    var checkPiscina = PF('checkPiscina').isChecked();
-    var checkCalefaccion = PF('checkCalefaccion').isChecked();
-    
-    var filterLogical = new OpenLayers.Filter.Logical({
-        type: OpenLayers.Filter.Logical.AND});
-    
-    var pocicionArray =0;
-    
-    if(attributeTipo !== undefined && attributeTipo !== "" ){
-        var filterTipo = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'tipo',
-            value: attributeTipo
-        });
-        filterLogical.filters[pocicionArray]=filterTipo;
-        pocicionArray++;
-    }
-    
-    if(inputBarrio !== undefined){
-        var filterBarrio = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'barrio',
-            value: inputBarrio
-        });
-        filterLogical.filters[pocicionArray]=filterBarrio;
-        pocicionArray++;
-    }
-    
-    if(checkVenta !== undefined && checkVenta === true ){
-        var filterCompra = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'compra',
-            value: checkVenta
-        });
-        filterLogical.filters[pocicionArray]=filterCompra;
-        pocicionArray++;
-    }
-    
-    if(checkAlquiler !== undefined && checkAlquiler === true){
-        var filterAlquiler = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'alquiler',
-            value: checkAlquiler
-        });
-        filterLogical.filters[pocicionArray]=filterAlquiler;
-        pocicionArray++;
-    }
-    
-    if(checkParrilla !== undefined && checkParrilla === true ){
-        var filterParrillero = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'parrillero',
-            value: checkParrilla
-        });
-        filterLogical.filters[pocicionArray]=filterParrillero;
-        pocicionArray++;
-    }
-    
-    if(checkGarage !== undefined && checkGarage === true){
-        var filterGarage = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'garage',
-            value: checkGarage
-        });
-        filterLogical.filters[pocicionArray]=filterGarage;
-        pocicionArray++;
-    }
-    
-    if(checkPiscina !== undefined && checkPiscina === true){
-        var filterPiscina = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'piscina',
-            value: checkPiscina
-        });
-        filterLogical.filters[pocicionArray]=filterPiscina;
-        pocicionArray++;
-    }
-    
-    if(checkCalefaccion !== undefined && checkCalefaccion === true ){
-        var filterCalefaccion = new OpenLayers.Filter.Comparison({
-            type: type,
-            property: 'calefaccio',
-            value: checkCalefaccion
-        });
-        filterLogical.filters[pocicionArray]=filterCalefaccion;
-        pocicionArray++;
-    }
-    
-    
-    filterStrategy.setFilter(filterLogical);
-    filterStrategy.activate(); 
-    wfsPropiedad.refresh({force: true});
-    wfsPropiedad.redraw();
-}
- 
- 
- 
 function resetTipo(){
     filterStrategy.setFilter("");  
     wfsPropiedad.refresh({force: true});
@@ -446,150 +264,6 @@ function desactivarControles(){
     }
 }
 
-function crearPropiedad(){
-    
-    var estado = PF('selectEstado').value;
-    
-    var alquiler;
-    if(PF('selectAlquiler').isChecked()){
-        alquiler = 'TRUE';
-    }else{
-        alquiler = 'FALSE';
-    }
-    var venta;               
-    if(PF('selectVenta').isChecked()){
-        venta = 'TRUE';
-    }else{
-        venta = 'FALSE';
-    }
-    var barrio = document.getElementById('FormPropiedad:barrio').value;
-    var precio = document.getElementById('FormPropiedad:precio').value;
-    var dormitorio = document.getElementById('FormPropiedad:dormitorio').value;
-    var banio = document.getElementById('FormPropiedad:banio').value;
-    var m2construido = document.getElementById('FormPropiedad:m2construido').value;
-    var m2terreno = document.getElementById('FormPropiedad:m2terreno').value;
-    
-    var parrilla;
-    if(PF('selectParrilla').isChecked()){
-        parrilla = 'TRUE';
-    }else{
-        parrilla = 'FALSE';
-    }
-    var garage;
-    if(PF('selectGarage').isChecked()){
-        garage = 'TRUE';
-    }else{
-        garage = 'FALSE';
-    }              
-    var piscina;
-    if(PF('selectPiscina').isChecked()){
-        piscina = 'TRUE';
-    }else{
-        piscina = 'FALSE';
-    }                
-    var calefaccion;
-    if(PF('selectCalefaccion').isChecked()){
-        calefaccion = 'TRUE';
-    }else{
-        calefaccion = 'FALSE';
-    } 
-    var tipo = PF('selecttipo').value;
-    
-    var tamanio = wfsPropiedad.features.length;
-    var features = wfsPropiedad.features;
-    var feature = features[tamanio-1];
-    
-    feature.attributes.state = OpenLayers.State.INSERT;
-    feature.attributes['estado'] = estado;
-    feature.attributes['alquiler'] = alquiler;
-    feature.attributes['compra'] = venta;
-    feature.attributes['barrio'] = barrio;
-    feature.attributes['precio'] = precio;
-    feature.attributes['cantDormit'] = dormitorio;
-    feature.attributes['cantBanio'] = banio;
-    feature.attributes['construido'] = m2construido;
-    feature.attributes['padronM2'] = m2terreno;
-    feature.attributes['parrillero'] = parrilla;
-    feature.attributes['garage'] = garage;
-    feature.attributes['piscina'] = piscina;
-    feature.attributes['calefaccio'] = calefaccion;
-    feature.attributes['tipo'] = tipo;
-    
-    saveStrategy.save();
-    document.load();
-}
-
-function modificarPropiedad(){
-    var estado = PF('selectEstado').value;
-    
-    var alquiler;
-    if(PF('selectAlquiler').isChecked()){
-        alquiler = 'TRUE';
-    }else{
-        alquiler = 'FALSE';
-    }
-    var venta;               
-    if(PF('selectVenta').isChecked()){
-        venta = 'TRUE';
-    }else{
-        venta = 'FALSE';
-    }
-    var barrio = document.getElementById('FormPropiedad:barrio').value;
-    var precio = document.getElementById('FormPropiedad:precio').value;
-    var dormitorio = document.getElementById('FormPropiedad:dormitorio').value;
-    var banio = document.getElementById('FormPropiedad:banio').value;
-    var m2construido = document.getElementById('FormPropiedad:m2construido').value;
-    var m2terreno = document.getElementById('FormPropiedad:m2terreno').value;
-    var fid = document.getElementById('FormPropiedad:text').value;
-    var parrilla;
-    if(PF('selectParrilla').isChecked()){
-        parrilla = 'TRUE';
-    }else{
-        parrilla = 'FALSE';
-    }
-    var garage;
-    if(PF('selectGarage').isChecked()){
-        garage = 'TRUE';
-    }else{
-        garage = 'FALSE';
-    }              
-    var piscina;
-    if(PF('selectPiscina').isChecked()){
-        piscina = 'TRUE';
-    }else{
-        piscina = 'FALSE';
-    }                
-    var calefaccion;
-    if(PF('selectCalefaccion').isChecked()){
-        calefaccion = 'TRUE';
-    }else{
-        calefaccion = 'FALSE';
-    } 
-    var tipo = PF('selecttipo').value;
-    
-    var feature = selectFeature[0];
-    
-    feature.attributes['estado'] = estado;
-    feature.attributes['alquiler'] = alquiler;
-    feature.attributes['compra'] = venta;
-    feature.attributes['barrio'] = barrio;
-    feature.attributes['precio'] = precio;
-    feature.attributes['cantDormit'] = dormitorio;
-    feature.attributes['cantBanio'] = banio;
-    feature.attributes['construido'] = m2construido;
-    feature.attributes['padronM2'] = m2terreno;
-    feature.attributes['parrillero'] = parrilla;
-    feature.attributes['garage'] = garage;
-    feature.attributes['piscina'] = piscina;
-    feature.attributes['calefaccio'] = calefaccion;
-    feature.attributes['tipo'] = tipo;
-    
-    feature.state = OpenLayers.State.UPDATE;
-    
-    saveStrategy.save();
-    document.load();
-}            
-
 function accion(feature){
     if(drawControls.select.active){
         modificarPropiedad(feature);
@@ -604,30 +278,23 @@ function accion(feature){
     }
 }
 
-function deletePropiedad(){
-    seleccionarPropiedad();
-    var feature = selectFeature[0];
-    feature.state = OpenLayers.State.DELETE;
-    saveStrategy.save();
-    document.load();
-}
 
-function EliminarZonaCrecimiento(){
-    var feature = selectFeatureZona[0];
-    feature.state = OpenLayers.State.DELETE;
-    saveStrategyPoligon.save();
-    document.load();
-}
 
-function zonaCrecimiento(){
-    var demanda = PF('selectdemanda').value;
-    var tamanio = wfsZonaInteres.features.length;
-    var features = wfsZonaInteres.features;
-    var feature = features[tamanio-1];
+function propiedadUnica(){
     
-    feature.attributes.state = OpenLayers.State.INSERT;
-    feature.attributes['tipo'] = demanda;
-    saveStrategyPoligon.save();
-    document.load();
-        
+    var direccion = selectFeature[0].attributes['direccion'];
+    
+    var filterPropiedad = new OpenLayers.Filter.Comparison({
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: 'direccion',
+        value: direccion
+        });
+    
+    filterStrategy.setFilter(filterPropiedad);
+    filterStrategy.activate();
+    wfsPropiedad.refresh({force: true});
+    wfsPropiedad.redraw();
+    closePopUp(selectFeature[0]);
+    var posicionProp = new OpenLayers.LonLat(selectFeature[0].geometry.x, selectFeature[0].geometry.y);
+    map.setCenter(posicionProp, 17);
 }
