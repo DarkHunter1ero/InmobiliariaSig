@@ -14,7 +14,7 @@ function init(){
     var wmsNegocios = new OpenLayers.Layer.WMS('Comercios','http://localhost:8080/geoserver/wms/',{layers: 'negocios', transparent: true},{isBaseLayer: false});
     var wmsTransporte = new OpenLayers.Layer.WMS('Transporte ','http://localhost:8080/geoserver/wms/',{layers: 'ServTransporteRecreacion', transparent: true},{isBaseLayer: false});
     var wmsServiciosPublicos = new OpenLayers.Layer.WMS('Servicios Publicos ','http://localhost:8080/geoserver/wms/',{layers: 'ServiciosPublicos', transparent: true},{isBaseLayer: false});
-
+    
     saveStrategy = new OpenLayers.Strategy.Save();
     saveStrategyPoligon = new OpenLayers.Strategy.Save();
     filterStrategy = new OpenLayers.Strategy.Filter();
@@ -31,8 +31,8 @@ function init(){
         }),
         styleMap: new OpenLayers.StyleMap(PropStyle)
     });
-
-
+    
+    
     wfsZonaInteres = new OpenLayers.Layer.Vector('Zona de Interes', {
         strategies: [new OpenLayers.Strategy.BBOX, saveStrategyPoligon],
         protocol: new OpenLayers.Protocol.WFS({
@@ -46,7 +46,7 @@ function init(){
         }),
         styleMap: new OpenLayers.StyleMap(ZoneStyle)
     });
-
+    
     wfsNroPuerta = new OpenLayers.Layer.Vector('Propiedades', {
         strategies: [new OpenLayers.Strategy.Fixed],
         protocol: new OpenLayers.Protocol.WFS({
@@ -106,14 +106,6 @@ function init(){
                 )
     };
     
-    function closePopUp(feature){
-        if(feature.popup) {
-            map.removePopup(feature.popup);
-            feature.popup.destroy();
-            delete feature.popup;
-            map.redraw();
-        }
-    }
     
     function cargarDatosPropiedad(feature){
         
@@ -190,16 +182,22 @@ function init(){
         selectFeatureZona = [feature];
     }
     
-    function featAdded() {
+    //    function featAdded() {
+    //        $('#FormPropiedad\\:text').val(drawControls.point.handler.point.geometry.x+", "+drawControls.point.handler.point.geometry.y);
+    //        
+    //        document.getElementById('FormPropiedad:hdnBtn').click();
+    //    }
+    
+    function featAdded(event) {
         
-        //        var el = document.getElementById('FormPropiedad:text');
-        //        
-        //        /*  if(wfsPropiedad.features.length > 1){
-        //                            wfsPropiedad.removeFeatures(wfsPropiedad.features[0]);   
-        //                        }*/
-        //        el.value=drawControls.point.handler.point.geometry.x+", "+drawControls.point.handler.point.geometry.y;
+        var el = document.getElementById('FormPropiedad:text');
         
-        $('#FormPropiedad\\:text').val(drawControls.point.handler.point.geometry.x+", "+drawControls.point.handler.point.geometry.y);
+        var lonLat = event.geometry.getBounds().getCenterLonLat().clone().transform(proj_900913, proj_4326);
+        
+        var coord_x = lonLat.lon.toFixed(9);
+        var coord_y = lonLat.lat.toFixed(9);
+        var coord1 = proj4('+proj=longlat +datum=WGS84 +no_defs', '+proj=utm +zone=21 +south +datum=WGS84 +units=m +no_defs', [coord_x, coord_y]);
+        el.value=coord1[0]+", "+coord1[1];
         
         document.getElementById('FormPropiedad:hdnBtn').click();
     }
@@ -278,7 +276,13 @@ function accion(feature){
     }
 }
 
-
+function closePopUp(feature){
+    if(feature.popup) {
+        map.removePopup(feature.popup);
+        feature.popup.destroy();
+        delete feature.popup;
+    }
+}
 
 function propiedadUnica(){
     
@@ -288,7 +292,7 @@ function propiedadUnica(){
         type: OpenLayers.Filter.Comparison.EQUAL_TO,
         property: 'direccion',
         value: direccion
-        });
+    });
     
     filterStrategy.setFilter(filterPropiedad);
     filterStrategy.activate();

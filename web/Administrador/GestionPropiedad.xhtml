@@ -10,12 +10,13 @@
         <ui:define name="centro">
             <h:head>
                 <h:outputScript library="js" name="ABMPropiedad.js"/>
+                <h:outputScript library="js" name="proj4.js"/>
             </h:head>
             <h:body onload="init()">
                 <h:form id="FormPropiedad">
                     
-                    <h:commandButton id="hdnBtn" value="BuscarDir">
-                        <f:ajax event="click" execute="FormPropiedad:text" listener="#{direccionController.obtenerDireccion()}"/>
+                    <h:commandButton id="hdnBtn" value="BuscarDir" style="display: none">
+                        <f:ajax event="click" execute="@form" render="text :FormPropiedad:direccion" listener="#{direccionController.obtenerDireccion()}"/>
                     </h:commandButton>
                     
                     <ul class="nav nav-pills">
@@ -54,7 +55,7 @@
                         <p:panelGrid columns="2"  style="text-align: center; margin: auto;">
                             <div id="map" style="width: 900px; height: 700px;"></div>
                             
-                            <p:panelGrid columns="2">
+                            <p:panelGrid id="GridAtributos" columns="2">
                                 <p:outputLabel value="Direccion: " for="direccion" />
                                 <p:inputText id="direccion" value="#{direccionController.direccion}"/>
                                 <p:outputLabel value="Estado: " for="estado" />
@@ -97,8 +98,6 @@
                                     <f:selectItem itemLabel="Apartamento" itemValue="Apartamento" />
                                     <f:selectItem itemLabel="Terreno" itemValue="Terreno" />
                                 </p:selectOneMenu> 
-                                <p:outputLabel value="Coordenadas:" for="text" />
-                                
                             </p:panelGrid>
                             <p:panelGrid columns="3"  style="text-align: center; margin: auto;">
                                 <p:commandButton action="#" value="Guardar" onclick="accion();" >     
@@ -110,8 +109,10 @@
                                 <p:link value="Gestion Usuarios registrados" id="Gestion_Usuario" href="/Administrador/usuario/List.xhtml"/>
                             </p:panelGrid>
                         </p:panelGrid>
+                        <p:outputLabel value="Coordenadas:" for="text" />
+                        <h:inputText id="text" value="#{direccionController.coordenadas}"/>
                     </h:panelGroup>
-                    <h:inputText disabled="true" id="text" value="#{direccionController.coordenadas}"/>
+                    
                 </h:form>
             </h:body>
         </ui:define>
