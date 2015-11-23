@@ -77,7 +77,7 @@ function init(){
         select: new OpenLayers.Control.SelectFeature(
                 wfsPropiedad,
         {
-            clickout: false, toggle: false,
+            clickout: true, toggle: false,
             multiple: false, hover: false,
             toggleKey: "ctrlKey", // ctrl key removes from selection
             multipleKey: "shiftKey", // shift key adds to selection
@@ -88,7 +88,7 @@ function init(){
         delete: new OpenLayers.Control.SelectFeature(
                 wfsPropiedad,
         {
-            clickout: false, toggle: false,
+            clickout: true, toggle: false,
             multiple: false, hover: false,
             toggleKey: "ctrlKey", // ctrl key removes from selection
             multipleKey: "shiftKey", // shift key adds to selectiona
