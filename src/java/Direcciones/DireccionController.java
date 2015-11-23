@@ -56,11 +56,13 @@ public class DireccionController implements Serializable {
             sitiosInteres.clear();
             obtenerSitiosInteres();
             List<Object[]> resultFiltros = direccionFacade.ObtenerPropiedadSitioInteres(distancia, sitiosInteres);
-            int i=0;
-            for(Object obj : resultFiltros){
-                prueba = prueba + obj.toString();
-                if(i < resultFiltros.size()-1){
-                   prueba = prueba + ",";
+            if(resultFiltros != null){
+                int i=0;
+                for(Object obj : resultFiltros){
+                    prueba = prueba + obj.toString();
+                    if(i < resultFiltros.size()-1){
+                       prueba = prueba + ",";
+                    }
                 }
             }
     }

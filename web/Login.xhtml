@@ -12,10 +12,10 @@
             <p:inputText style="width: 150px"  value="#{loginController.nick}" id="user" />
             <p:outputLabel value="Pass  "/>
             <p:password id="nonFeedback" style="width: 150px" value="#{loginController.pass}"/>  
-            <p:commandButton value="Ingresar" styleClass="ui-priority-primary" action="#{loginController.login()}" update=":growl :BodyInicio :BodyLogin" />
+            <p:commandButton value="Ingresar" styleClass="ui-priority-primary" action="#{loginController.login()}" />
         </h:form>
         <h:form rendered="#{loginController.logged}">
-            <p:commandButton value="Cerrar Session" styleClass="ui-priority-primary" action="#{loginController.logout()}" update=":growl :BodyInicio :BodyLogin" />
+            <p:commandButton value="Cerrar Session" styleClass="ui-priority-primary" action="#{loginController.logout()}"/>
         </h:form>
     </h:body>
 </html>

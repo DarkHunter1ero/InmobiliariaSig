@@ -111,8 +111,7 @@ function filtroSitioInteres(){
     
     
     var arregloDirecc = document.getElementById('FormFiltrosAvanzados:arregloDirecc').value;
-    if(arregloDirecc !== ""){
-        
+
         var result = arregloDirecc.split(",");
     
         for (var i=0; i<result.length; i++) { 
@@ -129,7 +128,6 @@ function filtroSitioInteres(){
         filterStrategy.activate();
         wfsPropiedad.refresh({force: true});
         wfsPropiedad.redraw();
-    }
 }
 
 function activarBtn(){document.getElementById('FormFiltrosAvanzados:btnBean').click();}

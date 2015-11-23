@@ -24,8 +24,10 @@
                     <f:ajax event="click" execute="@form" render=":FormFiltrosAvanzados:arregloDirecc" listener="#{direccionController.filtroAvanzado()}" onevent="activarBtn"/>
                 </h:commandButton>
                 <h:commandButton action="#" onclick="resetTipo();" value="Reset">
+                    <f:ajax event="click" execute="@form"/> 
                 </h:commandButton>
                 <h:inputText id="arregloDirecc" value="#{direccionController.prueba}" style="display: none"></h:inputText>
+                    
             </p:panelGrid>
             <h:commandLink  id="btnBean" value="dsfadsfadsf" onclick="filtroSitioInteres();" style="display: none">
                 <f:ajax event="click" execute="@all"/>
