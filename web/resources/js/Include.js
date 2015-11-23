@@ -1,4 +1,3 @@
-
 document.write("<script type='text/javascript' src='OpenLayer/OpenLayers.js'></script>");
 var map, drawControls, saveStrategy, wfsPropiedad, selectFeature, wfsZonaInteres, selectFeatureZona, proj_900913, proj_4326, posicion;
 var wfsNroPuerta, saveStrategyPoligon;
@@ -21,6 +20,11 @@ function init(){
     filterStrategy = new OpenLayers.Strategy.Filter();
     wfsPropiedad = new OpenLayers.Layer.Vector('Propiedades', {
         strategies: [new OpenLayers.Strategy.BBOX, saveStrategy, filterStrategy],
+        filter: new OpenLayers.Filter.Comparison({ 
+            type: type,
+            property: 'estado',
+            value: 'Publica'
+        }),
         protocol: new OpenLayers.Protocol.WFS({
             url: 'http://localhost:8080/geoserver/InmobiliariaTsig/wfs/',
             srsName: proj_900913,

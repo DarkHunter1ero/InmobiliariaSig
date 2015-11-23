@@ -5,9 +5,13 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-          
+    
     <ui:composition template="/Inicio.xhtml" >
         <ui:define name="centro">
+            <h:head>
+                <h:outputScript library="js" name="IncludeMapaFront.js"/>
+                <h:outputScript library="js" name="ShapeStyle.js"/>
+            </h:head>
             <h:body onload="init()">
                 <h:form id="FormUserCliente">
                     <h:panelGroup id="display" layout="span">
@@ -17,7 +21,7 @@
                                 <h:graphicImage name="image/Icono_seleccionar.jpg" style="width: 30px; height: 30px"/>
                             </p:commandLink>
                         </p:panelGrid>
-                            
+                        
                         <p:panelGrid columns="2"  style="text-align: center; margin: auto;">
                             <div id="map" style="width: 900px; height: 700px;"></div>
                         </p:panelGrid>
