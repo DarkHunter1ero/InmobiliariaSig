@@ -29,7 +29,7 @@ function init(){
             geometryName: 'the_geom',
             version: '1.1.0'
         }),
-        styleMap: new OpenLayers.StyleMap(PropStyle)
+        styleMap: new OpenLayers.StyleMap({'default': PropStyle})
     });
     
     
@@ -44,7 +44,7 @@ function init(){
             geometryName: 'the_geom',
             version: '1.1.0'
         }),
-        styleMap: new OpenLayers.StyleMap(ZoneStyle)
+        styleMap: new OpenLayers.StyleMap({'default':ZoneStyle})
     });
     
     wfsNroPuerta = new OpenLayers.Layer.Vector('Propiedades', {

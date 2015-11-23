@@ -1,3 +1,7 @@
+var defaultStyle = new OpenLayers.Style({
+  'pointRadius': 10
+});
+
 var PropStyle = new OpenLayers.Style(
             // the first argument is a base symbolizer
     // all other symbolizers in rules will extend this one
@@ -164,6 +168,29 @@ var PropStyle = new OpenLayers.Style(
                     labelAlign: 'cm',
                     labelXOffset: '10',
                     labelYOffset: '20'
+                }
+            }),
+            new OpenLayers.Rule({
+                filter: new OpenLayers.Filter.Comparison({
+                    type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                    property: "tipo",
+                    value: null
+                }),
+                symbolizer: {fillColor: 'default',
+		    fillOpacity: 0.5,
+		    strokeColor: 'black',
+		    strokeWidth: 1,
+                    //		    strokeOpacity: 0.1,
+		    label: '',
+		    fontFamily: 'Arial',
+		    fontStyle: 'Normal',
+		    fontSize: '11',
+		    fontColor: 'black',
+		    pointRadius: 8,
+		    cursor: 'hand',
+		    labelAlign: 'cm',
+		    labelXOffset: '10',
+		    labelYOffset: '20'
                 }
             })
         ]
