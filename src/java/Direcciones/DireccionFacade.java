@@ -5,7 +5,10 @@
  */
 package Direcciones;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,36 +40,44 @@ public class DireccionFacade{
         return direcc;
     }
     
-    public String ObtenerPropiedadSitioInteres(float distancia, int id, String[] sitios){
-        String t1 = "",t2 = "", t3 = "", t4 = "";
-        String t1Where, t2Where, t3Where, t4Where;
-       String direcc = "";
-        for (int i = 0; i < sitios.length; i++) {
-            if(sitios[i].contains("CentroEducativo")){
-                t1 = "CentroEducativo ce";
-                t1Where = "ST_DWithin(p.the_geom, ce.the_geom, 300) AND p.gid = "+distancia;
-            }else if(sitios[i].contains("negocios")){
-                t2 = "negocios n";
-                t2Where = "ST_DWithin(p.the_geom, n.the_geom, 300) AND p.gid = "+distancia;
-            }else if(sitios[i].contains("ServiciosPublicos")){
-                t3 = "ServiciosPublicos sp";
-                t3Where = "ST_DWithin(p.the_geom, sp.the_geom, 300) AND p.gid = "+distancia;
-            }else if(sitios[i].contains("ServTransporteRecreacion")){
-                t4 = "ServTransporteRecreacion st";
-                t4Where = "ST_DWithin(p.the_geom, st.the_geom, 300) AND p.gid = "+distancia;
+    public List<Object[]> ObtenerPropiedadSitioInteres(String distancia, List<String> sitios){
+        String tabla = "";
+        String TablaWhere = "";
+        String SELECT = "SELECT DISTINCT(p.direccion) ";
+        String FROM = "FROM \"Propiedad\" p, ";
+        String WHERE = " WHERE ";
+        String direcc = "";
+        
+        for (int i = 0; i < sitios.size(); i++) {
+            if(sitios.get(i).contains("CentroEducativo")){
+                tabla = " \"CentroEducativo\" ce";
+                TablaWhere = "ST_DWithin(p.the_geom, ce.the_geom, "+distancia+")";
+            }else if(sitios.get(i).contains("negocios")){
+                tabla = "negocios n";
+                TablaWhere = "ST_DWithin(p.the_geom, n.the_geom, "+distancia+")";
+            }else if(sitios.get(i).contains("ServiciosPublicos")){
+                tabla = " \"ServiciosPublicos\" sp";
+                TablaWhere = "ST_DWithin(p.the_geom, sp.the_geom,  "+distancia+")";
+            }else if(sitios.get(i).contains("ServTransporteRecreacion")){
+                tabla = " \"ServTransporteRecreacion\" st";
+                TablaWhere = "ST_DWithin(p.the_geom, st.the_geom,  "+distancia+")";
             }
+            if (i+1 < sitios.size()){
+                tabla += ", ";
+                TablaWhere += " AND ";
+            }
+            FROM += tabla;
+            WHERE += TablaWhere;
         }
-       String tablas = t1 + t2 + t3 + t4;
+        String QUERY = SELECT + FROM + WHERE;
         try{
-            Query query = em.createNativeQuery("SELECT * FROM \"Propiedad\" p, \"CentroEducativo\" ce, \"ServiciosPublicos\" sp WHERE ST_DWithin(p.the_geom, ce.the_geom, 300) AND p.gid = 48");
-            
+            Query query = em.createNativeQuery(QUERY);
             List<Object[]> results = query.getResultList();
-            for (Object[] result : results) {
-                return result[0] + " " + result[1];
-            } 
+            return results;
         }catch(Exception ex){
             System.out.println("Error: "+ ex.getMessage());
+            return null;
         }
-        return direcc;
     }
+
 }
